@@ -11,7 +11,7 @@ describe('counter', () => {
   // Read the generated IDL.
   const idl = JSON.parse(require('fs').readFileSync('./target/idl/counter.json', 'utf8'));
   //Address of the deployed program - TODO: Update this with the deployed program address
-  const programId = new anchor.web3.PublicKey('CoA6pQ7J8K4YVWLtk2EDapNb4wF73G3FXcVXdrnYVVQU');
+  const programId = new anchor.web3.PublicKey('2WGocoPnfAsMh3HjJ1hqn3ZniFoymzKkHWorcAM3Bcro');
   if (!programId) {
     throw new Error('Counter programId is not initialized properly');
   }
@@ -34,5 +34,18 @@ describe('counter', () => {
     console.log('Your transaction signature', tx);
     const accountData = await program.account.counter.fetch(counterAccount.publicKey);
     assert.equal(accountData.count.toString(), '0');
+  });
+
+  it('Increment', async () => {
+    // Invoke the increment instruction
+    const tx = await program.methods
+      .increment()
+      .accounts({
+        counter: counterAccount.publicKey,
+      })
+      .rpc();
+    console.log('Your transaction signature', tx);
+    const accountData = await program.account.counter.fetch(counterAccount.publicKey);
+    console.log(`Count: ${accountData.count}`);
   });
 });
