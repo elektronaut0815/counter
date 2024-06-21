@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 
-declare_id!("zK96WPaENqkNzFMSSwUWYrjmPLFTsHUL8sp3aKaYBTF");
+declare_id!("CoA6pQ7J8K4YVWLtk2EDapNb4wF73G3FXcVXdrnYVVQU");
 
 #[program]
 pub mod counter {
@@ -14,7 +14,7 @@ pub mod counter {
 
     pub fn increment(ctx: Context<Increment>) -> Result<()> {
         let counter = &mut ctx.accounts.counter;
-        counter.count += 1;
+        counter.count.checked_add(1).unwrap();
         Ok(())
     }
 }
